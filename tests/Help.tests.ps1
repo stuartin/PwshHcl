@@ -107,7 +107,7 @@ Describe "Test help for <_.Name>" -ForEach $commands {
         }
     }
 
-    if($helpParameterNames) {
+    # if($helpParameterNames) {
         Context "Test <_> help parameter help for <commandName>" -Foreach $helpParameterNames {
 
             # Shouldn't find extra parameters in help.
@@ -115,5 +115,5 @@ Describe "Test help for <_.Name>" -ForEach $commands {
                 $_ -in $parameterNames | Should -Be $true
             }
         }
-    }
+    # }
 }
