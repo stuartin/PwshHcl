@@ -1,18 +1,18 @@
 BeforeAll {
-    
+
     # NEW: Pre-Specify RegEx Matching Patterns
-    $gitTagMatchRegEx   = 'tag:\s?.(\d+(\.\d+)*)' # NOTE - was 'tag:\s*(\d+(?:\.\d+)*)' previously
-    $changelogTagMatchRegEx = "^##\s\[(?<Version>(\d+\.){1,3}\d+)\]"    
+    $gitTagMatchRegEx = 'tag:\s?.(\d+(\.\d+)*)' # NOTE - was 'tag:\s*(\d+(?:\.\d+)*)' previously
+    $changelogTagMatchRegEx = "^##\s\[(?<Version>(\d+\.){1,3}\d+)\]"
 
-    $moduleName         = $env:BHProjectName
-    $manifest           = Import-PowerShellDataFile -Path $env:BHPSModuleManifest
-    $outputDir          = Join-Path -Path $ENV:BHProjectPath -ChildPath 'Output'
-    $outputModDir       = Join-Path -Path $outputDir -ChildPath $env:BHProjectName
-    $outputModVerDir    = Join-Path -Path $outputModDir -ChildPath $manifest.ModuleVersion
+    $moduleName = $env:BHProjectName
+    $manifest = Import-PowerShellDataFile -Path $env:BHPSModuleManifest
+    $outputDir = Join-Path -Path $ENV:BHProjectPath -ChildPath 'Output'
+    $outputModDir = Join-Path -Path $outputDir -ChildPath $env:BHProjectName
+    $outputModVerDir = Join-Path -Path $outputModDir -ChildPath $manifest.ModuleVersion
     $outputManifestPath = Join-Path -Path $outputModVerDir -Child "$($moduleName).psd1"
-    $manifestData       = Test-ModuleManifest -Path $outputManifestPath -Verbose:$false -ErrorAction Stop -WarningAction SilentlyContinue
+    $manifestData = Test-ModuleManifest -Path $outputManifestPath -Verbose:$false -ErrorAction Stop -WarningAction SilentlyContinue
 
-    $changelogPath    = Join-Path -Path $env:BHProjectPath -Child 'CHANGELOG.md'
+    $changelogPath = Join-Path -Path $env:BHProjectPath -Child 'CHANGELOG.md'
     $changelogVersion = Get-Content $changelogPath | ForEach-Object {
         if ($_ -match $changelogTagMatchRegEx) {
             $changelogVersion = $matches.Version
@@ -20,7 +20,7 @@ BeforeAll {
         }
     }
 
-    $script:manifest    = $null
+    $script:manifest = $null
 }
 Describe 'Module manifest' {
 
@@ -51,7 +51,7 @@ Describe 'Module manifest' {
         }
 
         It 'Has a valid guid' {
-            {[guid]::Parse($manifestData.Guid)} | Should -Not -Throw
+            { [guid]::Parse($manifestData.Guid) } | Should -Not -Throw
         }
 
         It 'Has a valid copyright' {
@@ -72,7 +72,7 @@ Describe 'Module manifest' {
 Describe 'Git tagging' -Skip {
     BeforeAll {
         $gitTagVersion = $null
-        
+
         # Ensure to only pull in a single git executable (in case multiple git's are found on path).
         if ($git = (Get-Command git -CommandType Application -ErrorAction SilentlyContinue)[0]) {
             $thisCommit = & $git log --decorate --oneline HEAD~1..HEAD

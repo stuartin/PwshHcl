@@ -49,7 +49,7 @@ function Get-TextFilesList {
 
     process {
         Get-ChildItem -Path $Root -File -Recurse |
-            Where-Object { $_.Extension -in $txtFileExtentions }
+        Where-Object { $_.Extension -in $txtFileExtentions }
     }
 }
 
@@ -62,7 +62,7 @@ function Test-FileUnicode {
     )
 
     process {
-        $bytes     = [IO.File]::ReadAllBytes($FileInfo.FullName)
+        $bytes = [IO.File]::ReadAllBytes($FileInfo.FullName)
         $zeroBytes = @($bytes -eq 0)
         return [bool]$zeroBytes.Length
     }
