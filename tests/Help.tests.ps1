@@ -73,13 +73,13 @@ Describe "Test help for <_.Name>" -ForEach $commands {
         ($commandHelp.Examples.Example.Remarks | Select-Object -First 1).Text | Should -Not -BeNullOrEmpty
     }
 
-    if($helpLinks) {
+    # if($helpLinks) {
         It "Help link <_> is valid" -ForEach $helpLinks {
             (Invoke-WebRequest -Uri $_ -UseBasicParsing).StatusCode | Should -Be '200'
         }
-    }
+    # }
 
-    if($commandParameters) {
+    # if($commandParameters) {
         Context "Parameter <_.Name>" -Foreach $commandParameters {
 
             BeforeAll {
@@ -105,7 +105,7 @@ Describe "Test help for <_.Name>" -ForEach $commands {
                 $parameterHelpType | Should -Be $parameter.ParameterType.Name
             }
         }
-    }
+    # }
 
     # if($helpParameterNames) {
         Context "Test <_> help parameter help for <commandName>" -Foreach $helpParameterNames {
