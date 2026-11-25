@@ -6,10 +6,11 @@
         Target = 'CurrentUser'
     }
     'Pester' = @{
-        Version = '5.9.0'
+        Version = '6.2.0'
         Parameters = @{
             SkipPublisherCheck = $true
         }
+        # Import = $false
     }
     'psake' = @{
         Version = '4.9.0'
