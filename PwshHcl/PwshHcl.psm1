@@ -1,5 +1,7 @@
-function Get-HclEditBinaryPath {
+function Get-HclEditDetails {
     [CmdletBinding()]
+
+    $version = "0.2.19"
 
     $os = if ($IsMacOS) {
         'darwin'
@@ -24,7 +26,7 @@ function Get-HclEditBinaryPath {
     }
 
     $exeName = if ($os -eq 'windows') { 'hcledit.exe' } else { 'hcledit' }
-    $binPath = Join-Path -Path $PSScriptRoot -ChildPath (Join-Path -Path 'bin' -ChildPath "hcledit_0.2.19_$($os)_$($arch)/$exeName")
+    $binPath = Join-Path -Path $PSScriptRoot -ChildPath (Join-Path -Path 'bin' -ChildPath "hcledit_$($version)_$($os)_$($arch)/$exeName")
 
     if (-not (Test-Path -Path $binPath -PathType Leaf)) {
         throw "Bundled hcledit binary not found at: $binPath"
@@ -34,7 +36,10 @@ function Get-HclEditBinaryPath {
         & chmod +x $binPath 2>$null
     }
 
-    return $binPath
+    return @{
+        Binary = $binPath
+        Version = $version
+    }
 }
 
 
@@ -52,4 +57,5 @@ foreach ($import in @($classes + $public + $private)) {
 }
 
 Export-ModuleMember -Function $public.Basename
-$script:hclEdit = Get-HclEditBinaryPath
+$hclEditDetails = Get-HclEditDetails
+$script:hclEdit = [HclEdit]::new($hclEditDetails.Binary, $hclEditDetails.Version)
