@@ -12,11 +12,11 @@ class HclEdit {
     }
 
     # [string]
-    [string] Execute([string[]]$Arguments) {
+    [string] Execute([string]$Content, [string[]]$Arguments) {
         $allArgs = $Arguments
 
         # Capture stdout/stderr output cleanly into a variable
-        $output = & $this.Binary @allArgs 2>&1
+        $output = $Content | & $this.Binary @allArgs 2>&1
         $this.LastExitCode = $LASTEXITCODE
 
         if ($this.LastExitCode -ne 0) {
@@ -27,7 +27,7 @@ class HclEdit {
     }
 
     # Optional overload with no arguments
-    [object] Execute() {
-        return $this.Execute(@())
+    [object] Execute([string]$Content) {
+        return $this.Execute($Content, @())
     }
 }
