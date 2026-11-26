@@ -5,7 +5,8 @@ BeforeDiscovery {
     function global:FilterOutCommonParams {
         param ($Params)
         $commonParams = [System.Management.Automation.PSCmdlet]::OptionalCommonParameters + [System.Management.Automation.PSCmdlet]::CommonParameters
-        $params | Where-Object { $_.Name -notin $commonParams } | Sort-Object -Property Name -Unique
+        # TODO: Find a way to test Dynamic Params rather then just filtering them out
+        $params | Where-Object { $_.Name -notin $commonParams -and -not $_.IsDynamic } | Sort-Object -Property Name -Unique
     }
 
     $manifest = Import-PowerShellDataFile -Path $env:BHPSModuleManifest
